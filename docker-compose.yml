@@ -1,11 +1,24 @@
 version: '3'
 
+volumes:
+  mongo_data: {}
+
 services:
   ipfs:
     image: ipfs/go-ipfs:v0.10.0
     container_name: ipfs
     ports:
       - "5001:5001"
+      - "8080:8080"
     volumes:
       - "./ipfs0:/data/ipfs"
 
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db

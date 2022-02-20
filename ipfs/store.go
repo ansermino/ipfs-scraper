@@ -8,9 +8,11 @@ import (
 	ipfs "github.com/ipfs/go-ipfs-http-client"
 	"github.com/rs/zerolog/log"
 	"io/fs"
+	"ipfs-scraper/models"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 import ma "github.com/multiformats/go-multiaddr"
 
@@ -28,14 +30,15 @@ func getUnixfsNode(path string) (files.Node, error) {
 	return f, nil
 }
 
-func StoreDir(addr, path string) (cid.Cid, error) {
+func StoreDir(addr, path string, info *models.PageInfo) (*models.PageVersion, error) {
+	log.Info().Str("path", path).Msg("Pushing directory to IPFS...")
 	multi, err := ma.NewMultiaddr(addr)
 	if err != nil {
-		return cid.Undef, err
+		return nil, err
 	}
 	api, err := ipfs.NewApi(multi)
 	if err != nil {
-		return cid.Undef, err
+		return nil, err
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -68,5 +71,18 @@ func StoreDir(addr, path string) (cid.Cid, error) {
 
 	log.Info().Msgf("Added directory to IPFS with root CID %s\n", rootCid.String())
 
-	return rootCid, nil
+	version := &models.PageVersion{
+		Url:       info.Url,
+		Title:     info.Title,
+		Timestamp: time.Now().Format("Mon, 02 Jan 2006 15:04:05 MST"),
+		Cid:       rootCid.String(),
+	}
+
+	log.Info().Str("path", path).Msg("Removing local copy...")
+	err = os.RemoveAll(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return version, nil
 }
