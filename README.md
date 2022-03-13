@@ -24,7 +24,7 @@ docker-compose up
 
 You can run the API server with:
 ```bash
-go run main.go
+IPFS_URI="/ip4/127.0.0.1/tcp/5001" MONGODB_URI="mongodb://root:rootpassword@127.0.0.1:27017" go run main.go
 ```
 
 The UI can be started with:
