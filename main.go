@@ -7,6 +7,7 @@ import (
 	"ipfs-scraper/api"
 	"ipfs-scraper/config"
 	"ipfs-scraper/db"
+	"ipfs-scraper/ipfs"
 	"os"
 )
 
@@ -29,7 +30,7 @@ func main() {
 		log.Fatal().Err(err)
 	}
 
-	ifpsUri, err := loadEnvVar(IPFS_URI)
+	ipfsUri, err := loadEnvVar(IPFS_URI)
 	if err != nil {
 		log.Fatal().Err(err)
 	}
@@ -44,5 +45,11 @@ func main() {
 		log.Fatal().Err(err)
 	}
 
-	api.Serve(database, ifpsUri)
+	// Check we are able to connect to IPFS node
+	err = ipfs.PingNode(ipfsUri)
+	if err != nil {
+		log.Fatal().Err(err)
+	}
+
+	api.Serve(database, ipfsUri)
 }
