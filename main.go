@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"ipfs-scraper/api"
@@ -9,13 +10,32 @@ import (
 	"os"
 )
 
-var URL = "https://github.com/rs/zerolog"
-var IPFS_URL = "/ip4/127.0.0.1/tcp/5001"
+var MONGODB_URI = "MONGODB_URI"
+var IPFS_URI = "IPFS_URI"
+
+func loadEnvVar(ev string) (string, error) {
+	value := os.Getenv(ev)
+	if value == "" {
+		return "", fmt.Errorf("%s is required", ev)
+	}
+	return value, nil
+}
 
 func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
+	dbUri, err := loadEnvVar(MONGODB_URI)
+	if err != nil {
+		log.Fatal().Err(err)
+	}
+
+	ifpsUri, err := loadEnvVar(IPFS_URI)
+	if err != nil {
+		log.Fatal().Err(err)
+	}
+
 	dbCfg := &config.Database{
-		URI:      "mongodb://root:rootpassword@127.0.0.1:27017",
+		URI:      dbUri,
 		Database: "ipfsthat",
 	}
 
@@ -24,16 +44,5 @@ func main() {
 		log.Fatal().Err(err)
 	}
 
-	api.Serve(database, IPFS_URL)
-
-	//dir, err := scraper.FetchPage(URL)
-	//if err != nil {
-	//	log.Fatal().Err(err).Msg("Failed to fetch page")
-	//}
-	//_, err = ipfs.StoreDir(IPFS_URL, dir)
-	//if err != nil {
-	//	log.Fatal().Err(err).Msg("Failed to store dir")
-	//}
-
-	// TODO: Clean up local copy of site
+	api.Serve(database, ifpsUri)
 }
