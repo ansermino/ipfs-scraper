@@ -44,15 +44,5 @@ func main() {
 		log.Fatal().Err(err).Msg("DB connection failed")
 	}
 
-	// TODO: Remove
-	// Check we are able to connect to IPFS node
-	//err = ipfs.PingNode(ipfsUri)
-	//if err != nil {
-	//	// TODO: Change back
-	//	log.Info().Err(err).Msg("IPFS Check failed")
-	//} else {
-	//	log.Info().Str("addr", ipfsUri).Msg("Successfully connected to IPFS node")
-	//}
-
 	api.Serve(database, ipfsUri)
 }

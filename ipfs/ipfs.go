@@ -30,18 +30,6 @@ func getUnixfsNode(path string) (files.Node, error) {
 	return f, nil
 }
 
-// TODO : Remove
-// PingNode checks if an IPFS http API is connectable
-//func PingNode(addr string) error {
-//	api := ipfsApi.NewShell(addr)
-//
-//	if !api.i {
-//		return fmt.Errorf("client %s is down", addr)
-//	}
-//
-//	return nil
-//}
-
 func StoreDir(addr, path string, info *models.PageInfo) (*models.PageVersion, error) {
 	log.Info().Str("path", path).Msg("Pushing directory to IPFS...")
 	multi, err := ma.NewMultiaddr(addr)
