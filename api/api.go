@@ -11,6 +11,8 @@ import (
 	"net/http"
 )
 
+var listenAddr = ":8081"
+
 type api struct {
 	db       db.Database
 	ipfsAddr string
@@ -56,8 +58,8 @@ func serve(api *api) {
 		}
 	})
 
-	log.Info().Msg("Server listening...")
-	err := http.ListenAndServe(":8081", nil)
+	log.Info().Str("addr", listenAddr).Msg("Server listening ...")
+	err := http.ListenAndServe(listenAddr, nil)
 	if err != nil {
 		log.Fatal().Err(err)
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"ipfs-scraper/config"
@@ -58,6 +59,8 @@ func New(cfg *config.Database) (Database, error) {
 	err = client.Ping(ctx, readpref.Primary())
 	if err != nil {
 		return nil, err
+	} else {
+		log.Info().Str("addr", cfg.URI).Msg("Successfully connected to mongodb")
 	}
 
 	return &mongoStore{

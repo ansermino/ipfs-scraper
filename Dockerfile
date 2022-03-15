@@ -1,6 +1,7 @@
 FROM golang:1.17-alpine AS builder
 
 RUN apk add build-base
+
 WORKDIR /code
 COPY go.mod .
 COPY go.sum .
@@ -15,7 +16,9 @@ FROM alpine:3.14.0
 
 RUN apk add build-base
 
-RUN apk add curl
+# Required by api
+RUN apk add --no-cache wget
+
 COPY --from=builder /api /
 
 RUN chmod +x /api

@@ -8,8 +8,8 @@ const ViewVersions = () => {
 
     const [versions, setVersions] = useState([]);
     useEffect(() => {
-        console.log("/versions?title="+title)
-        fetch("/versions?title="+title)
+        console.log("/api/versions?title="+title)
+        fetch("/api/versions?title="+title)
             .then(res => res.json())
             .then(
                 (result) => {

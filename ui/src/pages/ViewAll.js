@@ -7,7 +7,7 @@ const ViewAll = (props) => {
     let { pathname } = useLocation();
     const [pages, setPages] = useState([]);
     useEffect(() => {
-        fetch("/pages")
+        fetch("/api/pages")
             .then(res => res.json())
             .then(
                 (result) => {

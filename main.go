@@ -7,7 +7,6 @@ import (
 	"ipfs-scraper/api"
 	"ipfs-scraper/config"
 	"ipfs-scraper/db"
-	"ipfs-scraper/ipfs"
 	"os"
 )
 
@@ -27,12 +26,12 @@ func main() {
 
 	dbUri, err := loadEnvVar(MONGODB_URI)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msg("Loading env var failed")
 	}
 
 	ipfsUri, err := loadEnvVar(IPFS_URI)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msg("Loading env var failed")
 	}
 
 	dbCfg := &config.Database{
@@ -42,14 +41,18 @@ func main() {
 
 	database, err := db.New(dbCfg)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msg("DB connection failed")
 	}
 
+	// TODO: Remove
 	// Check we are able to connect to IPFS node
-	err = ipfs.PingNode(ipfsUri)
-	if err != nil {
-		log.Fatal().Err(err)
-	}
+	//err = ipfs.PingNode(ipfsUri)
+	//if err != nil {
+	//	// TODO: Change back
+	//	log.Info().Err(err).Msg("IPFS Check failed")
+	//} else {
+	//	log.Info().Str("addr", ipfsUri).Msg("Successfully connected to IPFS node")
+	//}
 
 	api.Serve(database, ipfsUri)
 }
