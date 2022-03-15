@@ -6,6 +6,7 @@ import (
 	"github.com/ipfs/go-cid"
 	files "github.com/ipfs/go-ipfs-files"
 	ipfs "github.com/ipfs/go-ipfs-http-client"
+	ma "github.com/multiformats/go-multiaddr"
 	"github.com/rs/zerolog/log"
 	"io/fs"
 	"ipfs-scraper/models"
@@ -14,7 +15,6 @@ import (
 	"strings"
 	"time"
 )
-import ma "github.com/multiformats/go-multiaddr"
 
 func getUnixfsNode(path string) (files.Node, error) {
 	st, err := os.Stat(path)

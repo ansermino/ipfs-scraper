@@ -26,12 +26,12 @@ func main() {
 
 	dbUri, err := loadEnvVar(MONGODB_URI)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msg("Loading env var failed")
 	}
 
-	ifpsUri, err := loadEnvVar(IPFS_URI)
+	ipfsUri, err := loadEnvVar(IPFS_URI)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msg("Loading env var failed")
 	}
 
 	dbCfg := &config.Database{
@@ -41,8 +41,8 @@ func main() {
 
 	database, err := db.New(dbCfg)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msg("DB connection failed")
 	}
 
-	api.Serve(database, ifpsUri)
+	api.Serve(database, ipfsUri)
 }

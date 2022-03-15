@@ -13,8 +13,8 @@ export default class Add extends Component {
     }
     submitUrl(input) {
         this.setState({loading: true})
-        console.log("/add?url="+encodeURIComponent(this.state.url))
-        fetch("/add?url="+encodeURIComponent(this.state.url))
+        console.log("/api/add?url="+encodeURIComponent(this.state.url))
+        fetch("/api/add?url="+encodeURIComponent(this.state.url))
             .then(
                 (result) => {
                     console.log(result)
