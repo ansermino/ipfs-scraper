@@ -22,3 +22,26 @@ services:
       - 27017:27017
     volumes:
       - mongo_data:/data/db
+
+  api:
+    container_name: api
+    build:
+      context: .
+    depends_on:
+      - mongodb
+      - ipfs
+    environment:
+      MONGODB_URI: "mongodb://root:rootpassword@mongodb:27017"
+      IPFS_URI: "/dns4/ipfs/tcp/5001"
+    ports:
+      - "8081:8081"
+
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro

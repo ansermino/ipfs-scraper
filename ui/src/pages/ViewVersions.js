@@ -28,7 +28,7 @@ const ViewVersions = () => {
             <List divided relaxed>
                 {versions.map((version, i) => {
                     return (
-                        <List.Item key={i} href={`http://127.0.0.1:8080/ipfs/${version.cid}`} target="_blank">
+                        <List.Item key={i} href={`${window.location.protocol}//${window.location.host}/ipfs/${version.cid}`} target="_blank">
                             <List.Icon name='clock' size='large' verticalAlign='middle' />
                             <List.Content>
                                 <List.Header>{version.timestamp}</List.Header>
